@@ -1,1 +1,43 @@
-<p>register works!</p>
+<div class="register-container" style="max-width: 400px; margin: 50px auto; font-family: sans-serif;">
+  <h2>Alta de Operario - Nexus Logistics</h2>
+  
+  <div *ngIf="errorMessage" style="color: red; margin-bottom: 10px;">
+    {{ errorMessage }}
+  </div>
+
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" style="display: flex; flex-direction: column; gap: 15px;">
+    
+    <div>
+      <label>Nombre Completo</label><br>
+      <input type="text" formControlName="nombre" style="width: 100%; padding: 8px;">
+    </div>
+
+    <div>
+      <label>Email Corporativo</label><br>
+      <input type="email" formControlName="email" style="width: 100%; padding: 8px;">
+      <small *ngIf="registerForm.get('email')?.hasError('email') && registerForm.get('email')?.touched" style="color: red;">
+        Formato de email inválido
+      </small>
+    </div>
+
+    <div>
+      <label>Contraseña (Mínimo 6 caracteres)</label><br>
+      <input type="password" formControlName="password" style="width: 100%; padding: 8px;">
+      <small *ngIf="registerForm.get('password')?.hasError('minlength') && registerForm.get('password')?.touched" style="color: red;">
+        La contraseña es muy corta
+      </small>
+    </div>
+
+    <div>
+      <label>Confirmar Contraseña</label><br>
+      <input type="password" formControlName="confirmPassword" style="width: 100%; padding: 8px;">
+      <small *ngIf="registerForm.hasError('mismatch') && registerForm.get('confirmPassword')?.touched" style="color: red;">
+        Las contraseñas no coinciden
+      </small>
+    </div>
+
+    <button type="submit" [disabled]="registerForm.invalid || isLoading" style="padding: 10px; background: #0056b3; color: white; border: none; cursor: pointer;">
+      {{ isLoading ? 'Registrando...' : 'Registrar Operario' }}
+    </button>
+  </form>
+</div>
