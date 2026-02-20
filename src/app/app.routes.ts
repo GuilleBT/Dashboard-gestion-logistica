@@ -3,6 +3,11 @@ import { authGuard } from './core/guards/auth-guard';
 
 export const routes: Routes = [
   {
+    path: 'home',
+    loadComponent: () => import('./features/home/pages/home/home').then(m => m.Home)
+  },
+
+  {
     path: 'register',
     // Carga perezosa (Lazy Loading): Da muchos puntos en la evaluación
     loadComponent: () => import('./features/auth/pages/register/register').then(m => m.RegisterComponent)
@@ -18,7 +23,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'login', // Si entran a la raíz, los mandamos al login
+    redirectTo: 'home', 
     pathMatch: 'full'
   },
 

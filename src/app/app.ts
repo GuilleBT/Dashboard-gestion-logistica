@@ -1,12 +1,22 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, RouterOutlet } from '@angular/router';
+import { AuthService } from './core/services/auth';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [CommonModule, RouterModule, RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrls: ['./app.scss']
 })
 export class App {
-  protected readonly title = signal('nexus-logistics');
+  // Lo hacemos público para usarlo en el HTML
+  public authService = inject(AuthService);
+
+  async logout() {
+    await this.authService.logout();
+    // Redirigimos manualmente al home o login recargando la ruta
+    window.location.href = '/login'; 
+  }
 }
