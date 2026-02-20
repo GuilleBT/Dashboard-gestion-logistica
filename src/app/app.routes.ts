@@ -3,6 +3,12 @@ import { authGuard } from './core/guards/auth-guard';
 
 export const routes: Routes = [
   {
+    path: 'producto/:id',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/dashboard/pages/detail/detail').then(m => m.DetailComponent)
+  },
+
+  {
     path: 'home',
     loadComponent: () => import('./features/home/pages/home/home').then(m => m.Home)
   },

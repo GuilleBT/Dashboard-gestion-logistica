@@ -33,6 +33,20 @@ export class ProductService {
     if (error) throw error;
     return data || [];
   }
+  /** Obtiene un producto individual por su ID */
+  async getProductById(id: number): Promise<Producto | null> {
+    const { data, error } = await this.supabase
+      .from('productos')
+      .select('*')
+      .eq('id', id)
+      .single();
+      
+    if (error) {
+      console.error('Error al obtener producto', error);
+      return null;
+    }
+    return data;
+  }
 
   /** Crea un nuevo producto (CREATE) */
   async createProduct(producto: Producto) {

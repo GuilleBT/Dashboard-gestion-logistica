@@ -1,59 +1,50 @@
-# NexusLogistics
+# 📦 Nexus Logistics - Sistema de Gestión de Inventario
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.4.
+Aplicación web Single Page Application (SPA) desarrollada con **Angular 21** para la gestión logística avanzada, autenticación de operarios y control de stock en tiempo real. 
 
-## Development server
+Proyecto Final para el Grado Superior en Desarrollo Web.
 
-To start a local development server, run:
+## 🚀 Tecnologías Principales
+* **Frontend:** Angular 21 (Standalone Components, Signals, Reactive Forms).
+* **UI/UX:** PrimeNG v18 (DataGrid, Modals).
+* **Backend & Base de Datos:** Supabase (PostgreSQL, Autenticación JWT, BaaS).
+* **Arquitectura:** Lazy Loading, Guards (Auth & Role), Interceptors.
 
-```bash
-ng serve
-```
+## ⚙️ Requisitos e Instalación
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+1. Clonar el repositorio.
+2. Abrir la terminal en el directorio del proyecto.
+3. Instalar las dependencias de Node:
+   ```bash
+   npm install
+   Ejecutar el servidor de desarrollo:
 
-## Code scaffolding
+Bash
+ng serve -o
+El proyecto se abrirá automáticamente en http://localhost:4200/.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+🔐 Variables de Entorno (environment.ts)
+Para que la aplicación se comunique con el backend, es necesario configurar las variables de Supabase en src/environments/environment.ts:
 
-```bash
-ng generate component component-name
-```
+TypeScript
+export const environment = {
+  production: false,
+  supabase: {
+    url: 'https://iesrwgzrzleivoyahmdt.supabase.co',
+    publicKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllc3J3Z3pyemxlaXZveWFobWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0MzQ0MTksImV4cCI6MjA4NzAxMDQxOX0.aOPv58WXSY0zWIvpm6bATHkWdXnxEF43nEspJAQr7hk'
+  }
+};
+👥 Cuentas de Prueba (Roles)
+El sistema implementa un Control de Acceso Basado en Roles (RBAC). Usa estas credenciales para probar las funcionalidades:
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Administrador (Acceso total: Crear, Leer, Editar y Borrar):
 
-```bash
-ng generate --help
-```
+Email: admin@nexus.com
 
-## Building
+Contraseña: [123456]
 
-To build the project run:
+Operario Básico (Solo Crear y Leer):
 
-```bash
-ng build
-```
+Email: [guillermobeltrantabares@gmail.com]
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Contraseña: [123456]

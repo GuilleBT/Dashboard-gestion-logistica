@@ -1,0 +1,32 @@
+<div style="padding: 2rem; max-width: 600px; margin: 2rem auto; font-family: sans-serif; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+  
+  <div *ngIf="cargando" style="text-align: center; padding: 2rem;">Cargando datos del producto...</div>
+
+  <div *ngIf="!cargando && producto">
+    <h2 style="color: #333; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
+      📦 Detalle del Producto #{{ producto.id }}
+    </h2>
+    
+    <ul style="list-style: none; padding: 0; line-height: 2;">
+      <li><strong>Nombre:</strong> <span style="font-size: 1.2rem;">{{ producto.nombre }}</span></li>
+      <li><strong>Categoría:</strong> <span style="background: #e2e8f0; padding: 3px 8px; border-radius: 4px;">{{ producto.categoria }}</span></li>
+      <li><strong>Precio Unitario:</strong> {{ producto.precio | currency:'EUR' }}</li>
+      <li>
+        <strong>Stock en Almacén:</strong> 
+        <span [style.color]="producto.stock < 10 ? 'red' : 'green'" style="font-weight: bold;">
+          {{ producto.stock }} unidades
+        </span>
+      </li>
+    </ul>
+
+    <div style="margin-top: 2rem; text-align: center;">
+      <a routerLink="/dashboard" style="padding: 10px 20px; background: #64748b; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+        ⬅ Volver al Inventario
+      </a>
+    </div>
+  </div>
+
+  <div *ngIf="!cargando && !producto" style="color: red; text-align: center;">
+    Error: El producto no existe en la base de datos.
+  </div>
+</div>

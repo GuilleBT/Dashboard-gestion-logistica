@@ -2,7 +2,6 @@
   
   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
     <h1 style="color: #333; margin: 0;">📦 Centro Logístico Nexus</h1>
-    <p-button label="Cerrar Sesión" icon="pi pi-sign-out" severity="danger" (onClick)="logout()"></p-button>
   </div>
 
   <div style="margin-bottom: 1rem;">
@@ -44,6 +43,7 @@
           </span>
         </td>
         <td style="text-align: center;">
+          <p-button icon="pi pi-eye" severity="secondary" [text]="true" title="Ver Detalle" [routerLink]="['/producto', producto.id]"></p-button>
           <ng-container *ngIf="authService.currentUser()?.role === 'ADMIN'">
             <p-button icon="pi pi-pencil" severity="info" [text]="true" title="Editar" (onClick)="abrirModalEditar(producto)"></p-button>
             <p-button icon="pi pi-trash" severity="danger" [text]="true" title="Borrar" (onClick)="borrarProducto(producto.id, producto.nombre)"></p-button>

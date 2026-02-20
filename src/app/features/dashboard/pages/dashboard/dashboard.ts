@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { TableModule } from 'primeng/table';
@@ -13,7 +13,7 @@ import { AuthService } from '../../../../core/services/auth';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, TableModule, ButtonModule, DialogModule],
+  imports: [CommonModule, ReactiveFormsModule, TableModule, ButtonModule, DialogModule, RouterModule],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss']
 })
@@ -113,12 +113,5 @@ export class DashboardComponent implements OnInit {
         console.error('Error al borrar', error);
       }
     }
-  }
-
-  async logout() {
-    await this.authService.logout();
-    localStorage.clear();
-    sessionStorage.clear();
-    this.router.navigate(['/login']);
   }
 }
