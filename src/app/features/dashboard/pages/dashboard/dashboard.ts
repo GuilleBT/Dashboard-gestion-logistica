@@ -3,12 +3,10 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
-// Módulos de PrimeNG
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 
-// Tus servicios
 import { ProductService, Producto } from '../../../../core/services/product';
 import { AuthService } from '../../../../core/services/auth';
 
@@ -28,13 +26,14 @@ export class DashboardComponent implements OnInit {
   productos: Producto[] = [];
   cargando: boolean = true; 
 
-  // Variables para controlar el cuadro flotante (Modal)
   mostrarModal: boolean = false;
   guardando: boolean = false;
   productoForm: FormGroup;
+  
+  // Variable nueva para saber qué producto estamos editando (si es null, estamos creando uno nuevo)
+  productoEnEdicionId: number | null = null;
 
   constructor() {
-    // Inicializamos el formulario con validaciones estrictas
     this.productoForm = this.fb.group({
       nombre: ['', Validators.required],
       categoria: ['', Validators.required],
@@ -58,43 +57,57 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  // Abre el modal y limpia el formulario
   abrirModalNuevo() {
+    this.productoEnEdicionId = null; // Modo Creación
     this.productoForm.reset();
     this.mostrarModal = true;
   }
 
-  // Envía los datos a Supabase
+  // Nueva función: Abre el modal pero rellena los datos del producto seleccionado
+  abrirModalEditar(producto: Producto) {
+    this.productoEnEdicionId = producto.id || null; // Modo Edición
+    this.productoForm.patchValue({
+      nombre: producto.nombre,
+      categoria: producto.categoria,
+      precio: producto.precio,
+      stock: producto.stock
+    });
+    this.mostrarModal = true;
+  }
+
   async guardarProducto() {
     if (this.productoForm.invalid) return;
 
     this.guardando = true;
     try {
-      // Llamamos al servicio para crear el producto
-      await this.productService.createProduct(this.productoForm.value);
-      this.mostrarModal = false; // Cerramos el modal
-      await this.cargarInventario(); // Recargamos la tabla para ver el nuevo producto
+      if (this.productoEnEdicionId) {
+        // Si hay un ID guardado, actualizamos el producto existente
+        await this.productService.updateProduct(this.productoEnEdicionId, this.productoForm.value);
+      } else {
+        // Si no hay ID, creamos uno nuevo
+        await this.productService.createProduct(this.productoForm.value);
+      }
+      
+      this.mostrarModal = false; 
+      await this.cargarInventario(); 
     } catch (error) {
       console.error('Error al guardar', error);
+      alert('Hubo un error al guardar el producto.');
     } finally {
       this.guardando = false;
     }
   }
-  // Elimina un producto pidiendo confirmación primero
+
   async borrarProducto(id: number | undefined, nombre: string) {
-    if (!id) return; // Seguridad extra
+    if (!id) return; 
     
-    // Lanzamos la alerta nativa del navegador (queda pro y no requiere librerías extra)
-    const confirmar = confirm(`¿Estás seguro de que deseas eliminar el producto "${nombre}" del almacén? Esta acción no se puede deshacer.`);
-    
+    const confirmar = confirm(`¿Estás seguro de que deseas eliminar el producto "${nombre}"?`);
     if (confirmar) {
       try {
         await this.productService.deleteProduct(id);
-        // Recargamos la tabla para que el producto desaparezca de la pantalla
         await this.cargarInventario(); 
       } catch (error) {
-        console.error('Error al borrar el producto', error);
-        alert('Hubo un error al intentar borrar el producto.');
+        console.error('Error al borrar', error);
       }
     }
   }
