@@ -34,6 +34,10 @@ export const environment = {
     publicKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imllc3J3Z3pyemxlaXZveWFobWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0MzQ0MTksImV4cCI6MjA4NzAxMDQxOX0.aOPv58WXSY0zWIvpm6bATHkWdXnxEF43nEspJAQr7hk'
   }
 };
+
+## 🌍 Despliegue en Producción (Accesible vía HTTPS)
+La aplicación se encuentra desplegada y totalmente funcional en:
+👉 **(https://dashboard-gestion-logistica.vercel.app/)**
 👥 Cuentas de Prueba (Roles)
 El sistema implementa un Control de Acceso Basado en Roles (RBAC). Usa estas credenciales para probar las funcionalidades:
 
