@@ -44,8 +44,10 @@
           </span>
         </td>
         <td style="text-align: center;">
-          <p-button icon="pi pi-pencil" severity="info" [text]="true" title="Editar" (onClick)="abrirModalEditar(producto)"></p-button>
-          <p-button icon="pi pi-trash" severity="danger" [text]="true" title="Borrar" (onClick)="borrarProducto(producto.id, producto.nombre)"></p-button>
+          <ng-container *ngIf="authService.currentUser()?.role === 'ADMIN'">
+            <p-button icon="pi pi-pencil" severity="info" [text]="true" title="Editar" (onClick)="abrirModalEditar(producto)"></p-button>
+            <p-button icon="pi pi-trash" severity="danger" [text]="true" title="Borrar" (onClick)="borrarProducto(producto.id, producto.nombre)"></p-button>
+          </ng-container>
         </td>
       </tr>
     </ng-template>

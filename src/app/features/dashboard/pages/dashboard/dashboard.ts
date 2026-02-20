@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -19,9 +19,10 @@ import { AuthService } from '../../../../core/services/auth';
 })
 export class DashboardComponent implements OnInit {
   private productService = inject(ProductService);
-  private authService = inject(AuthService);
+  public authService = inject(AuthService);
   private router = inject(Router);
   private fb = inject(FormBuilder);
+  private cdr = inject(ChangeDetectorRef);
 
   productos: Producto[] = [];
   cargando: boolean = true; 
@@ -46,14 +47,16 @@ export class DashboardComponent implements OnInit {
     await this.cargarInventario();
   }
 
-  async cargarInventario() {
+ async cargarInventario() {
     this.cargando = true;
     try {
       this.productos = await this.productService.getProducts();
+      this.cdr.detectChanges(); // Forzamos la detección de cambios para que el loader desaparezca al cargar los datos
     } catch (error) {
       console.error('Error al cargar', error);
     } finally {
       this.cargando = false;
+      this.cdr.detectChanges(); // Apagamos el loader visualmente
     }
   }
 

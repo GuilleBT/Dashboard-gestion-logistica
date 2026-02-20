@@ -1,61 +1,56 @@
 import { Injectable, signal } from '@angular/core';
-import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../../../environments/environment';
 
-/**
- * Servicio centralizado para la gestión de autenticación con Supabase.
- * @description Maneja el registro, inicio de sesión, cierre de sesión y el estado reactivo del usuario.
- */
+export type Role = 'ADMIN' | 'USER' | null;
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private supabase: SupabaseClient;
-  
-  /** * Signal reactivo que contiene el usuario actual. 
-   * Si es null, no hay usuario logueado. 
-   */
-  currentUser = signal<User | null>(null);
+
+  // Controla si hay usuario y qué rol tiene
+  currentUser = signal<{ email: string; role: Role } | null>(null);
 
   constructor() {
-    // Inicializamos el cliente de Supabase con las claves de tu environment
     this.supabase = createClient(environment.supabase.url, environment.supabase.publicKey);
-
-    // Esto escucha los cambios automáticamente (si el usuario entra o sale)
-    this.supabase.auth.onAuthStateChange((event, session) => {
-      if (session) {
-        this.currentUser.set(session.user);
-      } else {
-        this.currentUser.set(null);
-      }
-    });
+    this.recuperarSesion();
   }
 
-  /**
-   * Registra un nuevo operario en el sistema logístico.
-   * @param email Correo electrónico del operario
-   * @param password Contraseña de acceso (mínimo 6 caracteres)
-   * @returns Promesa con los datos del usuario o un error
-   */
-  async register(email: string, password: string) {
-    return await this.supabase.auth.signUp({ email, password });
+  // Comprueba si ya estábamos logueados al recargar la página
+  private async recuperarSesion() {
+    const { data } = await this.supabase.auth.getSession();
+    if (data.session?.user?.email) {
+      this.establecerUsuario(data.session.user.email);
+    }
   }
 
-  /**
-   * Inicia sesión en el panel de administración.
-   * @param email Correo electrónico del operario
-   * @param password Contraseña de acceso
-   * @returns Promesa con la sesión o un error
-   */
-  async login(email: string, password: string) {
-    return await this.supabase.auth.signInWithPassword({ email, password });
+  // Lógica de roles 
+  private establecerUsuario(email: string) {
+    const role: Role = email === 'admin@nexus.com' ? 'ADMIN' : 'USER';
+    this.currentUser.set({ email, role });
   }
 
-  /**
-   * Cierra la sesión actual del operario en el sistema.
-   * @returns Promesa vacía al finalizar
-   */
+  async register(email: string, pass: string) {
+    const res = await this.supabase.auth.signUp({ email, password: pass });
+    if (res.data.user?.email) this.establecerUsuario(res.data.user.email);
+    return res;
+  }
+
+  async login(email: string, pass: string) {
+    const res = await this.supabase.auth.signInWithPassword({ email, password: pass });
+    if (res.data.user?.email) this.establecerUsuario(res.data.user.email);
+    return res;
+  }
+
   async logout() {
-    return await this.supabase.auth.signOut();
+    await this.supabase.auth.signOut();
+    this.currentUser.set(null); // Limpiamos el estado reactivo
+  }
+
+  // Método exigido en Check 31
+  isAuthenticated(): boolean {
+    return this.currentUser() !== null;
   }
 }
