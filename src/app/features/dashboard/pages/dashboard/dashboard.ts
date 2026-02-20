@@ -80,6 +80,24 @@ export class DashboardComponent implements OnInit {
       this.guardando = false;
     }
   }
+  // Elimina un producto pidiendo confirmación primero
+  async borrarProducto(id: number | undefined, nombre: string) {
+    if (!id) return; // Seguridad extra
+    
+    // Lanzamos la alerta nativa del navegador (queda pro y no requiere librerías extra)
+    const confirmar = confirm(`¿Estás seguro de que deseas eliminar el producto "${nombre}" del almacén? Esta acción no se puede deshacer.`);
+    
+    if (confirmar) {
+      try {
+        await this.productService.deleteProduct(id);
+        // Recargamos la tabla para que el producto desaparezca de la pantalla
+        await this.cargarInventario(); 
+      } catch (error) {
+        console.error('Error al borrar el producto', error);
+        alert('Hubo un error al intentar borrar el producto.');
+      }
+    }
+  }
 
   async logout() {
     await this.authService.logout();

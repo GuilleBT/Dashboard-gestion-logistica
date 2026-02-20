@@ -45,7 +45,7 @@
         </td>
         <td style="text-align: center;">
           <p-button icon="pi pi-pencil" severity="info" [text]="true" title="Editar"></p-button>
-          <p-button icon="pi pi-trash" severity="danger" [text]="true" title="Borrar"></p-button>
+          <p-button icon="pi pi-trash" severity="danger" [text]="true" title="Borrar" (onClick)="borrarProducto(producto.id, producto.nombre)"></p-button>
         </td>
       </tr>
     </ng-template>
