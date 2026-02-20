@@ -13,6 +13,7 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
+    canActivate: [authGuard], // Protegemos esta ruta con el guard de autenticación para poder cerrar la sesión desde el dashboard
     loadComponent: () => import('./features/dashboard/pages/dashboard/dashboard').then(m => m.DashboardComponent)
   },
   {

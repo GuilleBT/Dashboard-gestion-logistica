@@ -1,1 +1,93 @@
-<p>dashboard works!</p>
+<div style="padding: 2rem; max-width: 1200px; margin: 0 auto; font-family: sans-serif;">
+  
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h1 style="color: #333; margin: 0;">📦 Centro Logístico Nexus</h1>
+    <p-button label="Cerrar Sesión" icon="pi pi-sign-out" severity="danger" (onClick)="logout()"></p-button>
+  </div>
+
+  <div style="margin-bottom: 1rem;">
+    <p-button label="Nuevo Producto" icon="pi pi-plus" severity="success" (onClick)="abrirModalNuevo()"></p-button>
+  </div>
+
+  <p-table 
+    [value]="productos" 
+    [loading]="cargando" 
+    [paginator]="true" 
+    [rows]="5" 
+    styleClass="p-datatable-striped p-datatable-sm" 
+    [tableStyle]="{'min-width': '50rem', 'border': '1px solid #e0e0e0'}">
+    
+    <ng-template pTemplate="header">
+      <tr style="background-color: #f8f9fa;">
+        <th>ID</th>
+        <th>Nombre del Producto</th>
+        <th>Categoría</th>
+        <th>Precio</th>
+        <th>Stock Real</th>
+        <th style="text-align: center;">Acciones</th>
+      </tr>
+    </ng-template>S
+    
+    <ng-template pTemplate="body" let-producto>
+      <tr>
+        <td>{{producto.id}}</td>
+        <td><strong>{{producto.nombre}}</strong></td>
+        <td>
+          <span style="background: #e9ecef; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem;">
+            {{producto.categoria}}
+          </span>
+        </td>
+        <td>{{producto.precio | currency:'EUR'}}</td>
+        <td>
+          <span [style.color]="producto.stock < 10 ? 'red' : 'green'" style="font-weight: bold;">
+            {{producto.stock}} uds.
+          </span>
+        </td>
+        <td style="text-align: center;">
+          <p-button icon="pi pi-pencil" severity="info" [text]="true" title="Editar"></p-button>
+          <p-button icon="pi pi-trash" severity="danger" [text]="true" title="Borrar"></p-button>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6" style="text-align: center; padding: 3rem; color: #666;">
+          El almacén está vacío. Registra el primer producto de Nexus Logistics.
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+ <p-dialog header="Registrar Nuevo Producto" [(visible)]="mostrarModal" [modal]="true" [style]="{ width: '400px' }">
+  
+  <form [formGroup]="productoForm" (ngSubmit)="guardarProducto()" style="display: flex; flex-direction: column; gap: 1rem; padding-top: 1rem;">
+    
+    <div style="display: flex; flex-direction: column;">
+      <label style="font-weight: bold; margin-bottom: 5px;">Nombre</label>
+      <input type="text" formControlName="nombre" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;" placeholder="Ej. Monitor 24 pulgadas">
+    </div>
+
+    <div style="display: flex; flex-direction: column;">
+      <label style="font-weight: bold; margin-bottom: 5px;">Categoría</label>
+      <input type="text" formControlName="categoria" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;" placeholder="Ej. Periféricos">
+    </div>
+
+    <div style="display: flex; gap: 1rem;">
+      <div style="display: flex; flex-direction: column; flex: 1;">
+        <label style="font-weight: bold; margin-bottom: 5px;">Precio (€)</label>
+        <input type="number" formControlName="precio" step="0.01" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+      </div>
+      <div style="display: flex; flex-direction: column; flex: 1;">
+        <label style="font-weight: bold; margin-bottom: 5px;">Stock</label>
+        <input type="number" formControlName="stock" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
+      <p-button type="submit" [label]="guardando ? 'Guardando...' : 'Guardar Producto'" icon="pi pi-check" [disabled]="productoForm.invalid || guardando"></p-button>
+    </div>
+  </form>
+
+</p-dialog>
+
+</div>
