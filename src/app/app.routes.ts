@@ -15,7 +15,7 @@ export const routes: Routes = [
 
   {
     path: 'register',
-    // Carga perezosa (Lazy Loading): Da muchos puntos en la evaluación
+    
     loadComponent: () => import('./features/auth/pages/register/register').then(m => m.RegisterComponent)
   },
   {

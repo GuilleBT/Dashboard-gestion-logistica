@@ -16,7 +16,7 @@ export class RegisterComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  // Variable para el Loader (Check de la rúbrica RA8)
+  // Variable para el Loader y el mensaje de error
   isLoading = false;
   errorMessage = '';
 

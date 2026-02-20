@@ -12,7 +12,7 @@ import { ProductService, Producto } from '../../../../core/services/product';
 export class DetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private productService = inject(ProductService);
-  private cdr = inject(ChangeDetectorRef); // <--- NUESTRO SALVAVIDAS
+  private cdr = inject(ChangeDetectorRef); // 
 
   producto: Producto | null = null;
   cargando = true;
