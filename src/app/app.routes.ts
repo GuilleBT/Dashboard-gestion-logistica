@@ -20,5 +20,10 @@ export const routes: Routes = [
     path: '',
     redirectTo: 'login', // Si entran a la raíz, los mandamos al login
     pathMatch: 'full'
+  },
+
+  {
+    path: '**', // El comodín de Angular para atrapar rutas que no existen
+    loadComponent: () => import('./features/not-found/not-found').then(m => m.NotFoundComponent)
   }
 ];
